@@ -1,36 +1,31 @@
 package com.example.csisproject;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity;
+
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.csisproject.Controller.DBController;
 
 public class MainActivity extends AppCompatActivity {
-    StringBuffer Output = new StringBuffer();
-    SQLiteDatabase DB;
+    DBController DBControllerInstance = DBController.GetInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createDB();
-    }
 
-    private void createDB() {
-        try {
-            DB = openOrCreateDatabase("Meme.db", MODE_PRIVATE, null);
-        } catch (Exception ex) {
+        TextView textView = findViewById(R.id.testTitle);
 
+        if(DBControllerInstance == null) {
+            Toast.makeText(this, "Database not created", Toast.LENGTH_LONG);
+            textView.setText("False");
+        } else {
+            Toast.makeText(this, "Database exists or created", Toast.LENGTH_LONG);
+            textView.setText("True");
         }
-    }
-
-    private void createTables() {
-        // users table
-        String createUsers = "CREATE TABLE IF NOT EXISTS users;";
-        DB.execSQL((createUsers));
-
-        // favorites table
-        String createFavorites = "CREATE TABLE IF NOT EXISTS favorites;";
-        DB.execSQL(createFavorites);
-
     }
 }
