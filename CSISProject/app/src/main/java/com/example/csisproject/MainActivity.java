@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.csisproject.Controller.DBController;
+//import com.example.csisproject.Controller.DBController;
 
 public class MainActivity extends AppCompatActivity {
-    DBController DBControllerInstance = DBController.GetInstance();
+    //DBController DBControllerInstance = DBController.GetInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.testTitle);
 
+        /*
         if(DBControllerInstance == null) {
             Toast.makeText(this, "Database not created", Toast.LENGTH_LONG);
             textView.setText("False");
@@ -27,5 +28,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Database exists or created", Toast.LENGTH_LONG);
             textView.setText("True");
         }
+         */
     }
 }
