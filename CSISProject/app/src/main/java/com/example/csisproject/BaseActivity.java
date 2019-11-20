@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.csisproject.Model.Favorite;
+import com.example.csisproject.Model.Post;
 import com.example.csisproject.Model.User;
 
 import java.io.BufferedReader;
@@ -90,7 +87,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected boolean AddFavoriteMeme(Favorite data) {
+    protected boolean AddFavoriteMeme(Post data) {
         ContentValues favorite = new ContentValues();
         favorite.put(KEY_FAVORITE_URL, data.URL);
 //        favorite.put(KEY_FAVORITE_USERID, data.UserID);
@@ -104,20 +101,20 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private List<Favorite> GetAllUserFavorite(String userID) {
+    private List<Post> GetAllUserFavorite(String userID) {
         String getAllUserFavorite =
                 "SELECT * FROM " + FavoriteTable;// +
 //                " WHERE " + KEY_FAVORITE_USERID +
 //                " = " + useID;
 
-        List<Favorite> favoriteList = new ArrayList<>();
+        List<Post> favoriteList = new ArrayList<>();
 
         try {
             Cursor cursor = DB.rawQuery(getAllUserFavorite, null);
             if(cursor != null) {
                 cursor.moveToFirst();
                 do {
-                    Favorite temp = new Favorite();
+                    Post temp = new Post();
                     temp.ID = cursor.getString(0);
 //                    temp.UserID = cursor.getString(1);
                     temp.URL = cursor.getString(2);
