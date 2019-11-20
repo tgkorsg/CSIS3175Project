@@ -1,5 +1,7 @@
 package com.example.csisproject;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class MainActivity extends BaseActivity {
     //DBController DBControllerInstance = DBController.GetInstance();
@@ -8,8 +10,27 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         CreateDB();
         CreateTable();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final String data = getImgurData();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView txtView = findViewById(R.id.txtView);
+                            txtView.setText(data);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -14,6 +14,10 @@ import android.widget.Toast;
 import com.example.csisproject.Model.Favorite;
 import com.example.csisproject.Model.User;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,4 +138,30 @@ public class BaseActivity extends AppCompatActivity {
 //                " WHERE " + KEY_USER_USERNAME +
 //                " = " + user.Username;
 //    }
+
+    protected String getImgurData() {
+        String clientID = "ac5733c3af8790b";
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            String apiURL = "https://api.imgur.com/3/gallery/search/?client_id=546c25a59c58ad7&q=meme"; // only page0 works. maybe change sort to top, and window to month
+            URL url = new URL(apiURL);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", clientID);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream())); // error here!!!
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+
+            br.close();
+            connection.disconnect();
+        } catch (Exception e) {
+            return e.toString();
+        }
+
+        return sb.toString();
+    }
 }
