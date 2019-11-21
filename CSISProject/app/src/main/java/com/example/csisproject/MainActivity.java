@@ -3,6 +3,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.csisproject.Model.Post;
+
+import java.util.List;
+
 public class MainActivity extends BaseActivity {
     //DBController DBControllerInstance = DBController.GetInstance();
 
@@ -19,6 +23,8 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 try {
                     final String data = getImgurData();
+                    List<String[]> list = jsonToStringList(data);
+
 
                     runOnUiThread(new Runnable() {
                         @Override
