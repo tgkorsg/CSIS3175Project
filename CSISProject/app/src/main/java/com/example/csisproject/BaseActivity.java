@@ -165,8 +165,9 @@ public class BaseActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    protected List<String[]> jsonToStringList(String json) {
-        List<String[]> list = new ArrayList<>();
+    protected List<String>[] jsonToArrayOfStringList(String json) {
+        List<String> idList = new ArrayList<>();
+        List<String> urlList = new ArrayList<>();
 
         try {
             JSONObject jsonObj = new JSONObject(json);
@@ -175,20 +176,27 @@ public class BaseActivity extends AppCompatActivity {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject subObj = jsonArray.getJSONObject(i);
-                String id = subObj.getString("title");
+                if (subObj.has("images")) {
+                    String id = subObj.getString("title");
 
-                String img = subObj.getString("images");
-                JSONArray jsonArray2 = new JSONArray(img);
-                JSONObject subObj2 = jsonArray2.getJSONObject(0);
-                String url = subObj2.getString("link");
+                    String img = subObj.getString("images");
+                    JSONArray jsonArray2 = new JSONArray(img);
+                    JSONObject subObj2 = jsonArray2.getJSONObject(0);
+                    String url = subObj2.getString("link");
 
-                //Log.d("MANNY:" , "" + list[0].get(i));
-                //Log.d("MANNY:" , "" + list[1].get(i));
-                //Log.d("MANNY:" , "" + i + "th");
+                    if (url.contains(".jpg")) { // load jpg image only
+                        idList.add(id);
+                        urlList.add(url);
+                    }
+                }
             }
         } catch (Exception e) {
             Log.e("MANNY:", e.getMessage());
         }
+
+        List<String>[] list = new List[2];
+        list[0] = idList;
+        list[1] = urlList;
 
         return list;
     }

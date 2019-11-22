@@ -23,8 +23,7 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 try {
                     final String data = getImgurData();
-                    List<String[]> list = jsonToStringList(data);
-
+                    List<String>[] list = jsonToArrayOfStringList(data);
 
                     runOnUiThread(new Runnable() {
                         @Override
