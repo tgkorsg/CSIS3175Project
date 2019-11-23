@@ -148,9 +148,8 @@ public class BaseActivity extends AppCompatActivity {
             URL url = new URL(apiURL);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
-            //connection.setRequestProperty("Authorization", clientID);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream())); // error here!!!
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");

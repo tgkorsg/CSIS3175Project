@@ -1,4 +1,5 @@
 package com.example.csisproject;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -35,6 +36,10 @@ public class MainActivity extends BaseActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
+                // if click img in listView, [TEMPORARY]
+                startActivity(new Intent(MainActivity.this, MemeActivity.class));
             }
         });
     }

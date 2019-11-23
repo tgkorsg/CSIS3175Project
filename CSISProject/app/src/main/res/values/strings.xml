@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">CSIS Project</string>
+    <string name="btnSaveTxt">Save this in Gallery</string>
+    <string name="btnShareTxt">Share this Image</string>
+    <string name="imgLargeCnttDesc">Selected Preview Image</string>
 </resources>
