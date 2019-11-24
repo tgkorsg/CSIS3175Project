@@ -25,22 +25,11 @@ import java.util.List;
 
 public class MemeListFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-
     private MemeController MemeController = new MemeController();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_meme_list, container, false);
-
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-            }
-        });
 
         root.setBackgroundColor(Color.GRAY);
 
@@ -57,6 +46,7 @@ public class MemeListFragment extends Fragment {
                             MemeAdapter memeAdapter = new MemeAdapter(memeList, root.getContext());
 
                             ListView memeListView = root.findViewById(R.id.memeListView);
+                            memeListView.setAdapter(null);
                             memeListView.setAdapter(memeAdapter);
 
 

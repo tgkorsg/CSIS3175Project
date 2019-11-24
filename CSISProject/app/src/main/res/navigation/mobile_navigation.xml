@@ -13,40 +13,19 @@
         <action
             android:id="@+id/onMemeClick"
             app:destination="@id/memeFragment" />
+        <action
+            android:id="@+id/onGoToFavoriteMemeList"
+            app:destination="@id/favoriteMemeListFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.csis3175project.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.csis3175project.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.example.csis3175project.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
-
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="com.example.csis3175project.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
-
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.example.csis3175project.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
     <fragment
         android:id="@+id/memeFragment"
         android:name="com.example.csis3175project.ui.Meme.MemeFragment"
         android:label="fragment_meme"
         tools:layout="@layout/fragment_meme" />
+    <fragment
+        android:id="@+id/favoriteMemeListFragment"
+        android:name="com.example.csis3175project.ui.MemeList.FavoriteMemeListFragment"
+        android:label="@string/menu_favorite"
+        tools:layout="@layout/fragment_meme_list" />
 </navigation>

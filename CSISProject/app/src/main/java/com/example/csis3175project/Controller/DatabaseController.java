@@ -18,12 +18,12 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static SQLiteDatabase DB = null;
 
     private static String DB_NAME = "meme.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     protected static final String FAVORITE_TABLE = "favorites";
 
     protected static final String KEY_FAVORITE_ID = "id";
-    protected static final String KEY_FAVORITE_IMGUR_ID = "imgur_url";
+    protected static final String KEY_FAVORITE_IMGUR_ID = "imgur_id";
 
     private DatabaseController(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
@@ -70,6 +70,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         ContentValues favorite = new ContentValues();
         favorite.put(KEY_FAVORITE_IMGUR_ID, url);
 
+        DB = getWritableDatabase();
         DB.beginTransaction();
         try {
             DB.insertOrThrow(FAVORITE_TABLE, null, favorite);
@@ -78,25 +79,23 @@ public class DatabaseController extends SQLiteOpenHelper {
         } catch (Exception ex) {
             Output.append(ex.getMessage());
             return false;
+        } finally {
+            DB.endTransaction();
         }
     }
 
-    private List<Post> GetFavorites() {
+    public List<String> GetFavorites() {
         String getAllUserFavorite =
                 "SELECT * FROM " + FAVORITE_TABLE;
 
-        List<Post> favoriteList = new ArrayList<>();
+        List<String> favoriteList = new ArrayList<>();
 
         try {
             Cursor cursor = DB.rawQuery(getAllUserFavorite, null);
             if(cursor != null) {
                 cursor.moveToFirst();
                 do {
-                    Post temp = new Post();
-                    temp.ID = cursor.getString(0);
-                    temp.URL = cursor.getString(2);
-
-                    favoriteList.add(temp);
+                    favoriteList.add(cursor.getString(1));
                 } while (cursor.moveToNext());
             }
         } catch (Exception ex) {

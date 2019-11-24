@@ -92,6 +92,44 @@ public class MemeController {
         return sb.toString();
     }
 
+    public Post GetImgurGallery(String id) {
+        String apiURL = "https://api.imgur.com/3/gallery/album/" + id;
+
+        try {
+            URL url = new URL(apiURL);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Client-ID " + CLIENT_ID);
+
+            String rawData = MakeImgurApiRequest(connection);
+            JSONObject rawJson = new JSONObject(rawData);
+            Post post = ParseGallery(rawJson.getJSONObject("data"));
+
+            return post;
+        } catch (Exception e) {
+            return new Post("", "", "Cannot Load Post", 0);
+        }
+    }
+
+    public String MakeImgurApiRequest(HttpURLConnection connection) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+
+            br.close();
+            connection.disconnect();
+        } catch (Exception e) {
+            return "";
+        }
+
+        return sb.toString();
+    }
+
     public List<Post> JsonToArrayOfStringList(String json) {
         List<Post> postList = new ArrayList<>();
 
@@ -103,30 +141,7 @@ public class MemeController {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject postObj = jsonArray.getJSONObject(i);
                 if (postObj.has("images")) {
-                    // Post
-                    Post post = new Post(
-                            postObj.getString("id"),
-                            postObj.getString("link"),
-                            postObj.getString("title"),
-                            postObj.getInt("comment_count")
-                    );
-
-                    // Image
-                    String img = postObj.getString("images");
-                    JSONArray jsonArray2 = new JSONArray(img);
-                    JSONObject imageJsonObj = jsonArray2.getJSONObject(0);
-
-                    PostMedia postMedia = new PostMedia(
-                            imageJsonObj.getString("id"),
-                            imageJsonObj.getString("link"),
-                            imageJsonObj.getInt("width"),
-                            imageJsonObj.getInt("height"),
-                            imageJsonObj.getString("type")
-                    );
-
-                    post.PostMedia = postMedia;
-
-                    postList.add(post);
+                    postList.add(ParseGallery(postObj));
                 }
             }
         } catch (Exception e) {
@@ -136,7 +151,54 @@ public class MemeController {
         return postList;
     }
 
+    private Post ParseGallery(JSONObject postObj) {
+        try {
+            if (postObj.has("images")) {
+                // Post
+                Post post = new Post(
+                        postObj.getString("id"),
+                        postObj.getString("link"),
+                        postObj.getString("title"),
+                        postObj.getInt("comment_count")
+                );
+
+                // Image
+                JSONArray images = postObj.getJSONArray("images");
+                JSONObject imageJsonObj = images.getJSONObject(0);
+
+                PostMedia postMedia = new PostMedia(
+                        imageJsonObj.getString("id"),
+                        imageJsonObj.getString("link"),
+                        imageJsonObj.getInt("width"),
+                        imageJsonObj.getInt("height"),
+                        imageJsonObj.getString("type")
+                );
+
+                post.PostMedia = postMedia;
+
+                return post;
+            }
+        }  catch (Exception ex){
+            Log.e("MANNY:", ex.getMessage());
+        }
+
+        return new Post("", "", "Cannot Load Post", 0);
+    }
+
+    // Database
     public static void AddFavorite(Post post) {
-        DatabaseControllerInstance.AddFavorite(post.PostMedia.ID);
+        DatabaseControllerInstance.AddFavorite(post.ID);
+    }
+
+    public List<Post> GetFavorite() {
+        List<String> idList = DatabaseControllerInstance.GetFavorites();
+
+        List<Post> postList = new ArrayList<>();
+
+        for(String id: idList) {
+            postList.add(GetImgurGallery(id));
+        }
+
+        return postList;
     }
 }
