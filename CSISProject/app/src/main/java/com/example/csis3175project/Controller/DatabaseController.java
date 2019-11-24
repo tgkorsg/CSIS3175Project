@@ -18,7 +18,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static SQLiteDatabase DB = null;
 
     private static String DB_NAME = "meme.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     protected static final String FAVORITE_TABLE = "favorites";
 
@@ -35,6 +35,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         if (Instance == null) {
             Instance = new DatabaseController(context.getApplicationContext());
         }
+
         return Instance;
     }
 
@@ -50,7 +51,7 @@ public class DatabaseController extends SQLiteOpenHelper {
                     KEY_FAVORITE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     KEY_FAVORITE_IMGUR_ID + " TEXT" +
                     ")";
-            DB.execSQL(createFavoriteTable);
+            db.execSQL(createFavoriteTable);
         } catch (Exception ex) {
             Output.append(ex.getMessage());
         }
@@ -69,8 +70,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         ContentValues favorite = new ContentValues();
         favorite.put(KEY_FAVORITE_IMGUR_ID, url);
 
+        DB.beginTransaction();
         try {
-            DB.insert(FAVORITE_TABLE, null, favorite);
+            DB.insertOrThrow(FAVORITE_TABLE, null, favorite);
+            DB.setTransactionSuccessful();
             return true;
         } catch (Exception ex) {
             Output.append(ex.getMessage());

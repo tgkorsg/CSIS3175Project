@@ -59,9 +59,11 @@ public class MemeListFragment extends Fragment {
                             ListView memeListView = root.findViewById(R.id.memeListView);
                             memeListView.setAdapter(memeAdapter);
 
+
                             memeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    MemeController.setCurrentClickedMeme(memeList.get(position));
                                     Navigation.findNavController(view).navigate(R.id.onMemeClick);
                                 }
                             });

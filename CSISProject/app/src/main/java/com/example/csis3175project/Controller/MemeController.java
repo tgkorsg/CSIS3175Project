@@ -34,6 +34,17 @@ public class MemeController {
     }
 
     public static DatabaseController DatabaseControllerInstance = DatabaseController.GetInstance();
+
+    private static Post CurrentClickedMeme;
+
+    public Post getCurrentClickedMeme() {
+        return CurrentClickedMeme;
+    }
+
+    public void setCurrentClickedMeme(Post currentClickedMeme) {
+        CurrentClickedMeme = currentClickedMeme;
+    }
+
     public static String GetLoginUrl() {
         String url = "https://api.imgur.com/oauth2/authorize?client_id=" +
                 CLIENT_ID +

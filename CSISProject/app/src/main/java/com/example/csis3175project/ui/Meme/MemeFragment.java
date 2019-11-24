@@ -26,9 +26,13 @@ import androidx.navigation.Navigation;
 
 public class MemeFragment extends Fragment {
 
+    private MemeController MemeController = new MemeController();
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_meme, container, false);
+
+        Post post = MemeController.getCurrentClickedMeme();
 
         return root;
     }

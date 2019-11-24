@@ -79,10 +79,9 @@ public class MemeAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                MemeController.AddFavorite(meme);
-
                 if(currentFavState == R.raw.heart) {
                     currentFavState = R.raw.heart_filled;
+                    MemeController.AddFavorite(meme);
                 } else  {
                     currentFavState = R.raw.heart;
                 }
