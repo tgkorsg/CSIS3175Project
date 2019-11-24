@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
@@ -63,15 +64,18 @@ public class MemeAdapter extends BaseAdapter {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) this.Context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int width = displayMetrics.widthPixels;
+        final int screenWidth = displayMetrics.widthPixels;
 
         TextView memeTitle = view.findViewById(R.id.memeTitle);
         memeTitle.setText(meme.Title);
 
         final ImageView memeImg = view.findViewById(R.id.memeImg);
+        final ImageView favorateIcon = view.findViewById(R.id.favoriteIcon);
+        favorateIcon.setImageResource(R.raw.heart);
 
         try {
-            Picasso.get().load(meme.URL).into(memeImg);
+            double ratio = (double)screenWidth / (double)meme.PostMedia.Width;
+            Picasso.get().load(meme.PostMedia.Url).resize(screenWidth, (int)(meme.PostMedia.Height * ratio)).into(memeImg);
         } catch (Exception e) {
             Log.d("Catch", "Fail to load image");
         }

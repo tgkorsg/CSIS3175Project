@@ -3,6 +3,7 @@ package com.example.csis3175project.Controller;
 import android.util.Log;
 
 import com.example.csis3175project.Model.Post;
+import com.example.csis3175project.Model.PostMedia;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,6 +17,26 @@ import java.util.List;
 
 public class MemeController {
     private static List<Post> PostList;
+
+    private static String CLIENT_ID = "a6dc761ea452723";
+    private static String CLIENT_SECRET = "ed785970e6d642a35281ed11a1d3825bed1a0ee7";
+    private static String AccessToken = null;
+
+    public static String getAccessToken() {
+        return AccessToken;
+    }
+
+    public static void setAccessToken(String accessToken) {
+        AccessToken = accessToken;
+    }
+
+    public static String GetLoginUrl() {
+        String url = "https://api.imgur.com/oauth2/authorize?client_id=" +
+                CLIENT_ID +
+                "&response_type=token&state=login_in";
+
+        return url;
+    }
 
     public MemeController() {
         if(PostList == null) {
@@ -64,18 +85,31 @@ public class MemeController {
             JSONArray jsonArray = new JSONArray(data);
 
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject subObj = jsonArray.getJSONObject(i);
-                if (subObj.has("images")) {
-                    String title = subObj.getString("title");
+                JSONObject postObj = jsonArray.getJSONObject(i);
+                if (postObj.has("images")) {
+                    // Post
+                    Post post = new Post(
+                            postObj.getString("id"),
+                            postObj.getString("link"),
+                            postObj.getString("title"),
+                            postObj.getInt("comment_count")
+                    );
 
-                    String img = subObj.getString("images");
+                    // Image
+                    String img = postObj.getString("images");
                     JSONArray jsonArray2 = new JSONArray(img);
-                    JSONObject subObj2 = jsonArray2.getJSONObject(0);
-                    String url = subObj2.getString("link");
+                    JSONObject imageJsonObj = jsonArray2.getJSONObject(0);
 
-                    if (url.contains(".jpg")) { // load jpg image only
-                        postList.add(new Post(url, title));
-                    }
+                    PostMedia postMedia = new PostMedia(
+                            imageJsonObj.getString("link"),
+                            imageJsonObj.getInt("width"),
+                            imageJsonObj.getInt("height"),
+                            imageJsonObj.getString("type")
+                    );
+
+                    post.PostMedia = postMedia;
+
+                    postList.add(post);
                 }
             }
         } catch (Exception e) {
