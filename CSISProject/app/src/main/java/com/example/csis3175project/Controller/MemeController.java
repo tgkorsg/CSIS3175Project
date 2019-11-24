@@ -1,5 +1,8 @@
 package com.example.csis3175project.Controller;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.csis3175project.Model.Post;
@@ -30,6 +33,7 @@ public class MemeController {
         AccessToken = accessToken;
     }
 
+    public static DatabaseController DatabaseControllerInstance = DatabaseController.GetInstance();
     public static String GetLoginUrl() {
         String url = "https://api.imgur.com/oauth2/authorize?client_id=" +
                 CLIENT_ID +
@@ -39,6 +43,8 @@ public class MemeController {
     }
 
     public MemeController() {
+        DatabaseControllerInstance = DatabaseController.GetInstance();
+
         if(PostList == null) {
             PostList = new ArrayList<>();
         }
@@ -52,7 +58,6 @@ public class MemeController {
     }
 
     public String GetImgurData() {
-        //String clientID = "ac5733c3af8790b";
         StringBuilder sb = new StringBuilder();
 
         try {
@@ -101,6 +106,7 @@ public class MemeController {
                     JSONObject imageJsonObj = jsonArray2.getJSONObject(0);
 
                     PostMedia postMedia = new PostMedia(
+                            imageJsonObj.getString("id"),
                             imageJsonObj.getString("link"),
                             imageJsonObj.getInt("width"),
                             imageJsonObj.getInt("height"),
@@ -117,5 +123,9 @@ public class MemeController {
         }
 
         return postList;
+    }
+
+    public static void AddFavorite(Post post) {
+        DatabaseControllerInstance.AddFavorite(post.PostMedia.ID);
     }
 }

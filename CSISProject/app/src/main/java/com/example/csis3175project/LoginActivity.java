@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String accessToken = sharedPreferences.getString("accesstoken", "");
         if(accessToken != null && !accessToken.isEmpty()) {
+            MemeController.setAccessToken(accessToken);
             startActivity(new Intent(this, MainActivity.class));
         } else {
             setContentView(R.layout.activity_login);

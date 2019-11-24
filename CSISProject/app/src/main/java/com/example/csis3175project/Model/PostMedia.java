@@ -5,8 +5,10 @@ public class PostMedia {
     public int Width;
     public int Height;
     public String Type;
+    public String ID;
 
-    public PostMedia(String url, int width, int height, String type) {
+    public PostMedia(String id, String url, int width, int height, String type) {
+        ID = id;
         Url = url;
         Width = width;
         Height = height;

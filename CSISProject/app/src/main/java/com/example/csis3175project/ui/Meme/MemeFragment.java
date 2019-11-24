@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 public class MemeFragment extends Fragment {
-    private MemeController MemeController = new MemeController();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
