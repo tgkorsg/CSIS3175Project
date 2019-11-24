@@ -29,6 +29,7 @@ import java.util.List;
 public class MemeAdapter extends BaseAdapter {
     List<Post> MemeList;
     Context Context;
+    MemeController MemeController = new MemeController();
 
     public MemeAdapter(List<Post> postList, Context context) {
         super();
@@ -72,18 +73,23 @@ public class MemeAdapter extends BaseAdapter {
 
         final ImageView memeImg = view.findViewById(R.id.memeImg);
         final ImageView favoriteIcon = view.findViewById(R.id.favoriteIcon);
-        favoriteIcon.setImageResource(R.raw.heart);
+
+        if(MemeController.CheckIfIsFavorite(meme.ID)) {
+            favoriteIcon.setImageResource(R.raw.heart_filled);
+        } else {
+            favoriteIcon.setImageResource(R.raw.heart);
+        }
 
         favoriteIcon.setOnClickListener(new View.OnClickListener() {
-            int currentFavState = R.raw.heart_filled;
-
             @Override
             public void onClick(View v) {
-                if(currentFavState == R.raw.heart) {
+                int currentFavState;
+                if(!MemeController.CheckIfIsFavorite(meme.ID)) {
                     currentFavState = R.raw.heart_filled;
                     MemeController.AddFavorite(meme);
                 } else  {
                     currentFavState = R.raw.heart;
+                    MemeController.RemoveFavorite(meme);
                 }
 
                 favoriteIcon.setImageResource(currentFavState);

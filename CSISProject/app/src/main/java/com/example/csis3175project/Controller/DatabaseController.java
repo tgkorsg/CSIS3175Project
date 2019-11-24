@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.csis3175project.Model.Post;
 
@@ -18,7 +19,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static SQLiteDatabase DB = null;
 
     private static String DB_NAME = "meme.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     protected static final String FAVORITE_TABLE = "favorites";
 
@@ -82,6 +83,22 @@ public class DatabaseController extends SQLiteOpenHelper {
         } finally {
             DB.endTransaction();
         }
+    }
+
+    public boolean RemoveFavorite(String id) {
+        DB = getWritableDatabase();
+        DB.beginTransaction();
+        try {
+            DB.delete(FAVORITE_TABLE, KEY_FAVORITE_IMGUR_ID + " = ?", new String[]{id});
+            DB.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("DatabaseError", "Cannot delete favorite");
+            return false;
+        } finally {
+            DB.endTransaction();
+        }
+
+        return true;
     }
 
     public List<String> GetFavorites() {

@@ -39,6 +39,7 @@ public class MemeListFragment extends Fragment {
                 try {
                     final String data = MemeController.GetImgurData();
                     final List<Post> memeList = MemeController.JsonToArrayOfStringList(data);
+                    MemeController.UpdatePostIDList();
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -48,7 +49,6 @@ public class MemeListFragment extends Fragment {
                             ListView memeListView = root.findViewById(R.id.memeListView);
                             memeListView.setAdapter(null);
                             memeListView.setAdapter(memeAdapter);
-
 
                             memeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override

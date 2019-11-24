@@ -37,6 +37,8 @@ public class MemeController {
 
     private static Post CurrentClickedMeme;
 
+    private static List<String> PostIDList;
+
     public Post getCurrentClickedMeme() {
         return CurrentClickedMeme;
     }
@@ -186,12 +188,30 @@ public class MemeController {
     }
 
     // Database
-    public static void AddFavorite(Post post) {
+    public void AddFavorite(Post post) {
         DatabaseControllerInstance.AddFavorite(post.ID);
+    }
+
+    public void RemoveFavorite(Post post) {
+        DatabaseControllerInstance.RemoveFavorite(post.ID);
+    }
+
+    public boolean CheckIfIsFavorite(String id) {
+        if(PostIDList == null) {
+            return false;
+        }
+
+        return PostIDList.contains(id);
+    }
+
+    public void UpdatePostIDList() {
+        List<String> idList = DatabaseControllerInstance.GetFavorites();
+        PostIDList = idList;
     }
 
     public List<Post> GetFavorite() {
         List<String> idList = DatabaseControllerInstance.GetFavorites();
+        PostIDList = idList;
 
         List<Post> postList = new ArrayList<>();
 
