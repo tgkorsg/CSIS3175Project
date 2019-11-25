@@ -39,6 +39,8 @@ public class MemeController {
 
     private static List<String> PostIDList;
 
+    private static String CurrentMemeType = "time";
+
     public Post getCurrentClickedMeme() {
         return CurrentClickedMeme;
     }
@@ -74,7 +76,11 @@ public class MemeController {
         StringBuilder sb = new StringBuilder();
 
         try {
-            String apiURL = "https://api.imgur.com/3/gallery/search/?client_id=546c25a59c58ad7&q=meme"; // https://api.imgur.com/3/gallery/hot/viral/0.json
+            String apiURL = "https://api.imgur.com/3/gallery/search/" +
+                    CurrentMemeType + "/" +
+                    "?client_id=" +
+                    CLIENT_ID +
+                    "&q=meme";
             URL url = new URL(apiURL);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
@@ -185,6 +191,18 @@ public class MemeController {
         }
 
         return new Post("", "", "Cannot Load Post", 0);
+    }
+
+    public static void SetTop() {
+        CurrentMemeType = "top";
+    }
+
+    public static void SetTime() {
+        CurrentMemeType = "time";
+    }
+
+    public static void SetViral() {
+        CurrentMemeType = "viral";
     }
 
     // Database
