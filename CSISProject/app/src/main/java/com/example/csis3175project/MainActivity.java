@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.example.csis3175project.Controller.DatabaseController;
+import com.example.csis3175project.Controller.MemeController;
 import com.example.csis3175project.Model.Post;
 import com.example.csis3175project.Model.User;
 
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -92,5 +94,24 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public boolean onClickMemu(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_time:
+                MemeController.SetTime();
+                break;
+            case R.id.action_top:
+                MemeController.SetTop();
+                break;
+            case R.id.action_viral:
+                MemeController.SetViral();
+                break;
+
+        }
+
+        finish();
+        startActivity(getIntent());
+        return true;
     }
 }
