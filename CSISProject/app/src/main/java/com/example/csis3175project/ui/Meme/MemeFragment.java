@@ -2,9 +2,11 @@ package com.example.csis3175project.ui.Meme;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.csis3175project.Controller.MemeController;
 import com.example.csis3175project.MainActivity;
@@ -37,7 +40,7 @@ public class MemeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_meme, container, false);
 
-        Post post = MemeController.getCurrentClickedMeme();
+        final Post post = MemeController.getCurrentClickedMeme();
 
         // Display Image
         final String imgUrl = post.URL;
@@ -69,11 +72,54 @@ public class MemeFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    MemeController.saveImage(imgView, imgId);
-                } catch (Exception e) {
-                    Log.e("MANNY:", e.getMessage());
-                }
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final boolean success = MemeController.saveImage(imgView, post);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(success) {
+                                        Toast.makeText(getActivity(), "Saved in Download folder", Toast.LENGTH_SHORT);
+                                    } else {
+                                        Toast.makeText(getActivity(), "Error saving", Toast.LENGTH_SHORT);
+                                    }
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        Button setWallpaperBtn = root.findViewById(R.id.bntWallpaper);
+        setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                      final boolean success = MemeController.SetWallpaper(post, getActivity());
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(success) {
+                                Toast.makeText(root.getContext(), "Wallpaper is set", Toast.LENGTH_SHORT);
+                            } else {
+                                Toast.makeText(root.getContext(), "Error setting wallpaper", Toast.LENGTH_SHORT);
+                            }
+                        }
+                    });
+
+                    }
+                });
+
             }
         });
 
