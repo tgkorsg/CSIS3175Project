@@ -19,7 +19,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static SQLiteDatabase DB = null;
 
     private static String DB_NAME = "meme.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     protected static final String FAVORITE_TABLE = "favorites";
 
@@ -50,7 +50,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             String createFavoriteTable = "CREATE TABLE IF NOT EXISTS " + FAVORITE_TABLE +
                     "(" +
                     KEY_FAVORITE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    KEY_FAVORITE_IMGUR_ID + " TEXT" +
+                    KEY_FAVORITE_IMGUR_ID + " TEXT UNIQUE" +
                     ")";
             db.execSQL(createFavoriteTable);
         } catch (Exception ex) {

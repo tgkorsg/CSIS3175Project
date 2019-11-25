@@ -280,10 +280,12 @@ public class MemeController {
     // Database
     public void AddFavorite(Post post) {
         DatabaseControllerInstance.AddFavorite(post.ID);
+        UpdatePostIDList();
     }
 
     public void RemoveFavorite(Post post) {
         DatabaseControllerInstance.RemoveFavorite(post.ID);
+        UpdatePostIDList();
     }
 
     public boolean CheckIfIsFavorite(String id) {
