@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/memeFragment"
         android:name="com.example.csis3175project.ui.Meme.MemeFragment"
-        android:label="fragment_meme"
+        android:label="Meme"
         tools:layout="@layout/fragment_meme" />
     <fragment
         android:id="@+id/favoriteMemeListFragment"
