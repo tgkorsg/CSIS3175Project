@@ -8,12 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.csis3175project.Controller.MemeController;
 import com.example.csis3175project.MainActivity;
@@ -41,6 +43,25 @@ public class MemeFragment extends Fragment {
         final String imgUrl = post.URL;
         final ImageView imgView = root.findViewById(R.id.imgViewLarge);
         Picasso.get().load(imgUrl).into(imgView);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int screenWidth = displayMetrics.widthPixels;
+
+        LinearLayout memeImageContainer = root.findViewById(R.id.memeImageContainer);
+        ViewGroup.LayoutParams params = memeImageContainer.getLayoutParams();
+        params.height = screenWidth;
+        params.width = screenWidth;
+        memeImageContainer.setLayoutParams(params);
+
+        try {
+            double ratio = (double)screenWidth / (double)post.PostMedia.Height;
+            Picasso.get().load(post.PostMedia.Url)
+                    .resize((int)(post.PostMedia.Width * ratio), screenWidth)
+                    .into(imgView);
+        } catch (Exception e) {
+            Log.d("Catch", "Fail to load image");
+        }
 
         // Save Image
         final String imgId = post.ID;
