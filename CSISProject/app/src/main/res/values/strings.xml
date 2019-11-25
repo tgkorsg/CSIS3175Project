@@ -16,4 +16,6 @@
     <string name="action_time">Time</string>
     <string name="action_viral">Viral</string>
     <string name="action_top">Top</string>
+    <string name="btnSaveTxt">Download</string>
+    <string name="btnShareTxt">Share</string>
 </resources>

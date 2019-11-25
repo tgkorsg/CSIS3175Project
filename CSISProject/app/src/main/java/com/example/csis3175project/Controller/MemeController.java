@@ -3,7 +3,11 @@ package com.example.csis3175project.Controller;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.csis3175project.Model.Post;
 import com.example.csis3175project.Model.PostMedia;
@@ -12,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -131,6 +137,25 @@ public class MemeController {
 
         return sb.toString();
     }
+
+    public void saveImage(View v, String filename){
+        String StoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String savePath = StoragePath + "/Download";
+        File f = new File(savePath);
+        if (!f.isDirectory()) f.mkdirs();
+        v.buildDrawingCache();
+        Bitmap bitmap = v.getDrawingCache();
+        FileOutputStream fos;
+
+        try{
+            fos = new FileOutputStream(savePath+"/"+filename+".jpg");
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+        }catch (Exception e){
+            Log.e("MANNY:", e.getMessage());
+        }
+    }
+
+
 
     public List<Post> JsonToArrayOfStringList(String json) {
         List<Post> postList = new ArrayList<>();
